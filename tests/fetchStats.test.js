@@ -12,6 +12,15 @@ const data = {
       contributionsCollection: {
         totalCommitContributions: 100,
         restrictedContributionsCount: 50,
+        contributionYears: [
+            2022,
+            2021,
+            2020,
+            2019,
+            2018,
+            2017,
+            2016,
+        ]
       },
       pullRequests: { totalCount: 300 },
       openIssues: { totalCount: 100 },
@@ -108,6 +117,7 @@ describe("Test fetchStats", () => {
   });
 
   it("should fetch total commits", async () => {
+    // fetching overall stats and per year commits will receive the same data, but it doesn't matter
     mock.onPost("https://api.github.com/graphql").reply(200, data);
     mock
       .onGet("https://api.github.com/search/commits?q=author:anuraghazra")
@@ -115,7 +125,7 @@ describe("Test fetchStats", () => {
 
     let stats = await fetchStats("anuraghazra", true, true);
     const rank = calculateRank({
-      totalCommits: 1050,
+      totalCommits: 1050,  // (100 + 50) * 7
       totalRepos: 5,
       followers: 100,
       contributions: 61,
